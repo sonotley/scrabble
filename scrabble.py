@@ -64,7 +64,7 @@ def build_anagram_fast(words):
         except KeyError:
             anagrams.update({w_sorted: [word]})
 
-    with open(r'D:/anagram_dict_fast.json', 'w') as f:
+    with open(r'anagram_dict_fast.json', 'w') as f:
         json.dump(anagrams, f)
 
 
