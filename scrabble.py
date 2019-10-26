@@ -18,13 +18,13 @@ def letter_counting(words, letters):
     result = set()
     for word in words:
         w = word.strip()
-        if all([w.count(letter) <= letters.count(letter) for letter in word]) and not w == '':
+        if all((w.count(letter) <= letters.count(letter) for letter in word)) and not w == '':
             result.add(w)
     return result
 
 
 @timed
-def permutations_brute(words, letters):
+def brute(words, letters):
     result = set()
     for word in words:
         for n in range(1, len(letters) + 1):
