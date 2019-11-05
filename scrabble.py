@@ -5,9 +5,9 @@ import json
 
 def timed(fn):
     def wrapped(*args, **kwargs):
-        tic = time.time()
+        tic = time.perf_counter()
         r = fn(*args, **kwargs)
-        toc = time.time()
+        toc = time.perf_counter()
         return toc - tic, r
 
     return wrapped

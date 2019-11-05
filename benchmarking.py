@@ -9,33 +9,42 @@ import matplotlib.pyplot as plt
 # with open(r'brit-a-z.txt', 'r', encoding = "ISO-8859-1") as f:
 #     scrabble.build_anagram_fast(f)
 
-max_letters = 20
-repeats = 10
+max_letters = 7
+repeats = 1
 with open(r'anagram_dict_fast.json', 'r', encoding = "ISO-8859-1") as f:
     anagrams = json.load(f)
 
-results = {'anagram': np.zeros(max_letters), 'counting': np.zeros(max_letters), 'semibrute': np.zeros(max_letters),
-           'brute': np.zeros(max_letters)}
+results = {'Anagrams': np.zeros(max_letters), 'Letter Counting': np.zeros(max_letters), 'Semi-Brute': np.zeros(max_letters),
+           'Brute Force': np.zeros(max_letters)}
 
 for i in range(1, max_letters + 1):
     for j in range(repeats):
         ll = random.choices("abcdefghijklmnopqrstuvwxyz'", k=i)
 
-        results['anagram'][i - 1] += scrabble.anagram_lookup(ll, anagrams)[0]
+        results['Anagrams'][i - 1] += scrabble.anagram_lookup(ll, anagrams)[0]
 
         with open(r'brit-a-z.txt', 'r',encoding = "ISO-8859-1") as f:
-            results['counting'][i - 1] += scrabble.letter_counting(f, ll)[0]
+            results['Letter Counting'][i - 1] += scrabble.letter_counting(f, ll)[0]
 
         with open(r'brit-a-z.txt', 'r',encoding = "ISO-8859-1") as f:
-            results['semibrute'][i - 1] += (scrabble.semi_brute(f, ll)[0])
+            results['Semi-Brute'][i - 1] += (scrabble.semi_brute(f, ll)[0])
 
-        # with open(r'brit-a-z.txt', 'r',encoding = "ISO-8859-1") as f:
-        #     results['brute'][i - 1] += (scrabble.brute(f, ll)[0])
+        with open(r'brit-a-z.txt', 'r',encoding = "ISO-8859-1") as f:
+            results['Brute Force'][i - 1] += (scrabble.brute(f, ll)[0])
 
 df = pd.DataFrame(data=results, index=(range(1, max_letters + 1)))
 print(df)
+df.index.name = 'Number of letters'
 df.to_csv('bench.csv')
 sns.set()
 
-sns.lineplot(data=df)
+
+g = sns.barplot(data=df[-1:], log=True)
+g.set_ylim(0.00001, 1000)
+
+plt.show()
+
+sns.lineplot(data=df[df.columns[:4]])
+plt.xticks(range(1, max_letters + 1))
+
 plt.show()
